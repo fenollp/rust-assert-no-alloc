@@ -69,6 +69,20 @@ fn forbidden_simple() {
 }
 
 #[test]
+fn forbidden_simple_attribute() {
+	#[no_alloc]
+	fn func() {
+		assert_no_alloc(|| {
+			do_alloc();
+		});
+	}
+
+	assert_eq!(check_and_reset(), false);
+	func();
+	assert_eq!(check_and_reset(), true);
+}
+
+#[test]
 fn forbidden_in_nested() {
 	assert_eq!(check_and_reset(), false);
 	assert_no_alloc(|| {
